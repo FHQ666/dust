@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <title>测试页面</title>
+</head>
+<body>
+<script type="text/javascript" src="/echarts.min.js"></script>
+<script type="text/javascript" src="/jquery-2.0.3.min.js"></script>
+<script src="/laydate/laydate.js"></script>
+<div class="btn-group" data-toggle="buttons" style="margin-left: 20%">
+    时间选择：<input type="text" id="laydate" style="width: 50%" th:value="${datetime}">
+    <label class="btn btn-success" th:each="type:${types}">
+        <input type="radio" name="options" th:text="${type.value}" th:value="${type.getKey()}" onclick="getInfo()">
+    </label>
+</div>
+<div id="line" style="width: 95%; height: 400px;"></div>
+<script type="text/javascript">
+    laydate.render({
+        elem: '#laydate'
+        ,type: 'datetime'
+        ,range: true
+        ,done:function(value,date){
+            document.getElementById("laydate").value = value;
+            getInfo();
+        }
+    });
+    //定时刷新
+    setInterval(function (){
+        getInfo();
+    },60000);
+</script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('line'));
+    // 指定图表的配置项和数据
+    var option = {
+        title : {
+            // text : '粉尘检测折线图',
+            //subtext : 'demo'
+        },
+        tooltip : {
+            show : true,
+            trigger : 'axis'
+        },
+        legend : {
+            data : []
+            //图例
+        },
+        dataZoom : [ {
+            type : 'inside', //支持鼠标滚动缩放
+            start : 0, //默认数据初始缩放范围为10%到90%
+            end : 100
+        } ],
+        toolbox : {
+            show : true,
+            feature : {
+                mark : {
+                    show : true
+                },
+                dataView : {
+                    show : true,
+                    readOnly : false
+                },
+                magicType : {
+                    show : true,
+                    type : [ 'bar', 'line' ]
+                },
+                restore : {
+                    show : false,
+                },
+                saveAsImage : {
+                    show : true
+                }
+            }
+        },
+        calculable : true,
+        xAxis : [ {
+            type : 'category',
+            boundaryGap : false,
+            data : []
+        } ],
+        yAxis : [ {
+            name : '', //Y轴提示
+            type : 'value',
+            //min: 0,
+            //max: 30,
+            // interval: 1,   //Y轴数据跨度
+            axisLabel : {
+                formatter : '{value}' //Y轴单位
+            }
+        } ],
+        series : [ {
+            "name" : "",
+            "type" : "line",
+            "data" : [],
+            "smooth" : true, //主题--线条平滑
+            "barWidth" : "70", //柱子宽度
+            "symbol" : 'emptycircle', //设置折线图中表示每个坐标点的符号；emptycircle：空心圆；emptyrect：空心矩形；circle：实心圆；emptydiamond：菱形
+            "markPoint" : {
+                data : [ {
+                    type : 'max',
+                    name : '最大值'
+                }, {
+                    type : 'min',
+                    name : '最小值'
+                } ]
+            },
+            "markLine" : {
+                data : [ {
+                    type : 'average',
+                    name : '平均值'
+                } ]
+            },
+            //设置柱状图和节点的颜色
+            "itemStyle" : {
+                "normal" : {
+                    color : '#228B22',
+                    //设置折线的颜色
+                    lineStyle : {
+                        color : '#228B22'
+                    },
+                    //以下为柱状图顶部是否显示，显示位置和显示格式的设置了
+                    "label" : {
+                        show : true,
+                        textStyle : {
+                            color : '#00CD66'
+                        },
+                        position : 'botton',
+                        "formatter" : '\n{b}\n{c}'
+                    }
+                }
+            }
+        } //第一条折线
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    //myChart.showLoading();
+    getInfo();
+    function getInfo() {
+        var type = 0;
+        var obj = document.getElementsByName("options");
+        for(i=0;i<obj.length;i++){
+            if(obj[i].checked){
+                type = obj[i].value;
+            }
+        }
+        if(type == 0){
+            obj[0].checked = "checked";
+            type = 1;
+        }
+        getData(type);
+    }
+    function getData(type) {
+        var option = myChart.getOption();
+        $.ajax({
+            type : "post",
+            async : false, //同步执行
+            url : "/getData",
+            data : {
+                type : type,
+                datetime:document.getElementById("laydate").value
+            },
+            dataType : "json", //返回数据形式为json
+            success : function(result) {
+                if (result) {
+                    option.legend.data = result.legend;
+                    option.xAxis[0].data = result.category;
+                    option.yAxis[0].name = result.series[0].unit;
+                    option.series[0].data = result.series[0].data;
+                    // option.series[0].itemStyle.normal.label.formatter = "kkkk";
+                    myChart.hideLoading();
+                    myChart.setOption(option);
+                    myChart.hideLoading();
+                }
+            },
+            error : function(errorMsg) {
+                alert("图表请求数据失败!");
+                //myChart.hideLoading();
+                myChart.showLoading();
+            }
+        });
+    }
+</script>
+</body>
+</html>

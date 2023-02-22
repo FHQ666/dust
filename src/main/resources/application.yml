@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: ${Database.DRIVER:com.mysql.cj.jdbc.Driver}
+    username: dev_221116
+    password: Dev_2022_11_16_10_00_00
+    url: jdbc:mysql://${Database.IP:54.151.148.169}:3306/${Database.NAME:dev_221116}?characterEncoding=utf-8&useUnicode=true&serverTimezone=UTC
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 5000
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.fade.dust.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
