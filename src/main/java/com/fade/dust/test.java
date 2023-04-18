@@ -1,7 +1,0 @@
-package com.fade.dust;
-
-public class test {
-    public static void main(String[] args) {
-        System.out.println("Hello word!");
-    }
-}
