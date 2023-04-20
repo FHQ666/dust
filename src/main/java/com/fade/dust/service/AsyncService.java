@@ -17,16 +17,17 @@ public class AsyncService {
 
     //添加设备状态信息
     @Async //告诉spring这是一个异步任务
-    public boolean addData(String type,String val){
-        Date date = new Date(System.currentTimeMillis());
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public boolean addData(int eCO2, int eCH20, int TVOC, int PM25, int PM10, double Temperature, double Humidity) {
         DataRecord dataRecord = new DataRecord();
-        dataRecord.setType(Integer.parseInt(type));
-        dataRecord.setAddTime(dateFormat.format(date));
-        dataRecord.setVal(val);
+        dataRecord.setECO2(eCO2);
+        dataRecord.setECH20(eCH20);
+        dataRecord.setTVOC(TVOC);
+        dataRecord.setPM25(PM25);
+        dataRecord.setPM10(PM10);
+        dataRecord.setTemperature(Temperature);
+        dataRecord.setHumidity(Humidity);
+
         int insert = dataRecordMapper.insert(dataRecord);
-        return insert>0 ? true : false;
+        return insert > 0 ? true : false;
     }
-
-
 }
