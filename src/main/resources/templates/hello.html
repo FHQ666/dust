@@ -8,30 +8,6 @@
 <script type="text/javascript" src="/echarts.min.js"></script>
 <script type="text/javascript" src="/jquery-2.0.3.min.js"></script>
 <script src="/laydate/laydate.js"></script>
-<!--<div class="btn-group" data-toggle="buttons" style="margin-left: 20%">-->
-<!--    时间选择：<input type="text" id="laydate" style="width: 50%" th:value="${datetime}">-->
-<!--    <label class="btn btn-success">-->
-<!--        <input type="radio" name="options" value="eCO2" onclick="getInfo()">eCO2-->
-<!--    </label>-->
-<!--    <label class="btn btn-success">-->
-<!--        <input type="radio" name="options" value="eCH20" onclick="getInfo()">eCH20-->
-<!--    </label>-->
-<!--    <label class="btn btn-success">-->
-<!--        <input type="radio" name="options" value="TVOC" onclick="getInfo()">TVOC-->
-<!--    </label>-->
-<!--    <label class="btn btn-success">-->
-<!--        <input type="radio" name="options" value="PM25" onclick="getInfo()">PM2.5-->
-<!--    </label>-->
-<!--    <label class="btn btn-success">-->
-<!--        <input type="radio" name="options" value="PM10" onclick="getInfo()">PM10-->
-<!--    </label>-->
-<!--    <label class="btn btn-success">-->
-<!--        <input type="radio" name="options" value="Temperature" onclick="getInfo()">Temperature-->
-<!--    </label>-->
-<!--    <label class="btn btn-success">-->
-<!--        <input type="radio" name="options" value="Humidity" onclick="getInfo()">Humidity-->
-<!--    </label>-->
-<!--</div>-->
 <div class="btn-group" data-toggle="buttons" style="margin-left: 20%">
     时间选择：<input type="text" id="laydate" style="width: 50%" th:value="${datetime}">
     <label class="btn btn-success" th:each="type:${types}">
