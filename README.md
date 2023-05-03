@@ -16,9 +16,46 @@
 ##### 数据库
 
 1. 创建一个名为 `air_quality_monitor` 的数据库，字符集选择 `utf8mb4`，排序规则选择 `utf8mb4_general_ci`。
-2. 在 `src/main/resources/application.properties` 文件中，配置数据库连接信息，例如：
+2. 使用以下 SQL 语句创建数据表：
+
+   CREATE DATABASE dust
+   
+   CHARACTER SET utf8mb4
+
+   COLLATE utf8mb4_general_ci;
+
+   USE dust;
+
+   CREATE TABLE \`data` (
+
+   \`id` int(11) NOT NULL AUTO_INCREMENT,
+
+   \`eCO2` int(11) NOT NULL,
+
+   \`eCH20` int(11) NOT NULL,
+
+   \`TVOC` int(11) NOT NULL,
+
+   \`PM25` int(11) NOT NULL,
+
+   \`PM10` int(11) NOT NULL,
+
+   \`Temperature` double NOT NULL,
+
+   \`Humidity` double NOT NULL,
+
+   \`add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+   PRIMARY KEY (\`id`)
+
+   ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+
+3. 在 `src/main/resources/application.properties` 文件中，配置数据库连接信息，例如：
    spring.datasource.url=jdbc:mysql://localhost:3306/air_quality_monitor?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+
    spring.datasource.username=root
+
    spring.datasource.password=123456
 
    根据实际情况修改数据库名、用户名和密码。
