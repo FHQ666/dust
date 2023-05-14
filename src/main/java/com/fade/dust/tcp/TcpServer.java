@@ -40,7 +40,7 @@ public class TcpServer {
                     double Humidity = ((buffer[14] & 0xFF) + (buffer[15] & 0xFF) * 0.1);
 
                     //继电器控制
-//                    tcpclient(PM25);
+                    tcpclient(PM25);
 
                     // 添加数据
                     BeanUtil.beanUtil.asyncService.addData(eCO2, eCH20, TVOC, PM25, PM10, Temperature, Humidity);
